@@ -111,11 +111,11 @@ namespace AvaloniaGif
             }
         }
 
-        public GifBackgroundWorker(GifDecoder gifDecode)
+        public GifBackgroundWorker(GifDecoder gifDecode, GifRepeatBehavior gifRepeatBehavior)
         {
             _gifDecoder = gifDecode;
             _lockObj = new object();
-            _repeatBehavior = new GifRepeatBehavior() { LoopForever = true };
+            _repeatBehavior = gifRepeatBehavior;
             _cmdQueue = new Queue<BgWorkerCommand>();
 
             // Save the color table cache ID's to refresh them on cache while

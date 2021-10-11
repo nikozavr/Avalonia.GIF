@@ -17,16 +17,16 @@ namespace AvaloniaGif.Demo
             };
             AvailableGifs = new List<string>
             {
-                "resm:AvaloniaGif.Demo.Images.laundry.gif",
-                "resm:AvaloniaGif.Demo.Images.earth.gif",
-                "resm:AvaloniaGif.Demo.Images.rainbow.gif",
-                "resm:AvaloniaGif.Demo.Images.newton-cradle.gif",
+                "AvaloniaGif.Demo.Images.laundry.gif",
+                "AvaloniaGif.Demo.Images.earth.gif",
+                "AvaloniaGif.Demo.Images.rainbow.gif",
+                "AvaloniaGif.Demo.Images.newton-cradle.gif",
                 
                 // Great shots by Vitaly Silkin, free to use:
                 // https://dribbble.com/colder/projects/219798-Loaders
-                "resm:AvaloniaGif.Demo.Images.loader.gif", 
-                "resm:AvaloniaGif.Demo.Images.evitare-loader.gif", 
-                "resm:AvaloniaGif.Demo.Images.c-loader.gif"
+                "AvaloniaGif.Demo.Images.loader.gif", 
+                "AvaloniaGif.Demo.Images.evitare-loader.gif", 
+                "AvaloniaGif.Demo.Images.c-loader.gif"
             };
         }
 

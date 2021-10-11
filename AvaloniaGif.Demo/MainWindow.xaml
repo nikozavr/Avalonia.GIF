@@ -9,11 +9,12 @@
         <StackPanel Grid.Column="0">
             <ComboBox SelectedItem="{Binding Path=Stretch}"
                       Items="{Binding Path=Stretches}" />
-            <ListBox SelectedItem="{Binding Path=SelectedGif}"
+            <ListBox Name="Gifs" SelectedItem="{Binding Path=SelectedGif}"
+                     SelectionChanged="SelectingItemsControl_OnSelectionChanged"
                      Items="{Binding Path=AvailableGifs}" />
         </StackPanel>
-        <gif:GifImage Grid.Column="1" SourceUriRaw="{Binding Path=SelectedGif}" 
+        <Image Grid.Column="1" Name="image" 
                       Stretch="Uniform"
-                      StretchDirection="Both" />
+                      StretchDirection="Both"/>
     </Grid>
 </Window>
