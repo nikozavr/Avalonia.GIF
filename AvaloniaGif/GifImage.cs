@@ -6,8 +6,6 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
 
 namespace AvaloniaGif
 {
@@ -88,12 +86,12 @@ namespace AvaloniaGif
         {
             var image = e.Sender as GifImage;
             if (image == null)
-                return; 
+                return;
         }
 
         public override void Render(DrawingContext context)
         {
-            if (gifInstance.GetBitmap() is WriteableBitmap source && backingRTB is not null)
+            if (gifInstance?.GetBitmap() is WriteableBitmap source && backingRTB != null)
             {
                 using (var ctx = backingRTB.CreateDrawingContext(null))
                 {
@@ -111,7 +109,7 @@ namespace AvaloniaGif
                 var destRect = viewPort
                     .CenterRect(new Rect(scaledSize))
                     .Intersect(viewPort);
-                
+
                 var sourceRect = new Rect(sourceSize)
                     .CenterRect(new Rect(destRect.Size / scale));
 
@@ -119,7 +117,7 @@ namespace AvaloniaGif
 
                 context.DrawImage(backingRTB, sourceRect, destRect, interpolationMode);
             }
-            
+
             Dispatcher.UIThread.Post(InvalidateVisual, DispatcherPriority.Background);
         }
 
@@ -141,6 +139,26 @@ namespace AvaloniaGif
             return result;
         }
 
+        private static void SourceChanged(AvaloniaPropertyChangedEventArgs e)
+        {
+            var image = e.Sender as GifImage;
+            if (image == null || (image.SourceUri == null && image.SourceUriRaw == null))
+                return;
+
+            image.gifInstance?.Dispose();
+            image.backingRTB?.Dispose();
+            image.backingRTB = null;
+
+            var value = e.NewValue;
+            if (value is string s)
+                value = new Uri(s);
+
+            image.gifInstance = new GifInstance();
+            image.gifInstance.SetSource(value);
+
+            image.backingRTB = new RenderTargetBitmap(image.gifInstance.GifPixelSize, new Vector(96, 96));
+        }
+
         /// <inheritdoc/>
         protected override Size ArrangeOverride(Size finalSize)
         {
@@ -156,26 +174,6 @@ namespace AvaloniaGif
             {
                 return new Size();
             }
-        }
-        
-        private static void SourceChanged(AvaloniaPropertyChangedEventArgs e)
-        {
-            var image = e.Sender as GifImage;
-            if (image == null)
-                return;
-
-            image.gifInstance?.Dispose();
-            image.backingRTB?.Dispose();
-            image.backingRTB = null;
-            
-            var value = e.NewValue;
-            if (value is string s)
-                value = new Uri(s);
-
-            image.gifInstance = new GifInstance();
-            image.gifInstance.SetSource(value);
-
-            image.backingRTB = new RenderTargetBitmap(image.gifInstance.GifPixelSize, new Vector(96, 96));
         }
     }
 }

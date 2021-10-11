@@ -1,16 +1,10 @@
 using AvaloniaGif.Decoding;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Animation;
-using System.Threading;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Rendering;
-using Avalonia.Logging;
-using JetBrains.Annotations;
 
 namespace AvaloniaGif
 {
@@ -20,14 +14,16 @@ namespace AvaloniaGif
         public IterationCount IterationCount { get; private set; }
         public bool AutoStart { get; private set; } = true;
         public Progress<int> Progress { get; private set; }
-        
+
+        private readonly object _bitmapSync = new object();
+
         bool _streamCanDispose;
         private GifDecoder _gifDecoder;
         private GifBackgroundWorker _bgWorker;
         private WriteableBitmap _targetBitmap;
         private bool _hasNewFrame;
         private bool _isDisposed;
-        
+
         public void SetSource(object newValue)
         {
             var sourceUri = newValue as Uri;
@@ -45,7 +41,13 @@ namespace AvaloniaGif
                     var assetLocator = AvaloniaLocator.Current.GetService<IAssetLoader>();
                     stream = assetLocator.Open(sourceUri);
                 }
-
+                else
+                {
+                    if (Path.IsPathRooted(sourceUri.OriginalString))
+                    {
+                        stream = File.OpenRead(sourceUri.OriginalString);
+                    }
+                }
             }
             else if (sourceStr != null)
             {
