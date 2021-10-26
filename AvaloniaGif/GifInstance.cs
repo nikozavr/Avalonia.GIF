@@ -108,7 +108,7 @@ namespace AvaloniaGif
         public void Dispose()
         {
             _isDisposed = true;
-            AvaloniaLocator.Current.GetService<IRenderTimer>().Tick += RenderTick;
+            AvaloniaLocator.Current.GetService<IRenderTimer>().Tick -= RenderTick;
             _bgWorker?.SendCommand(BgWorkerCommand.Dispose);
             _targetBitmap?.Dispose();
         }
