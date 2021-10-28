@@ -176,6 +176,7 @@ namespace AvaloniaGif
                     Thread.Sleep(60);
                     break;
                 case BgWorkerState.Start:
+                    ShowFirstFrame();
                     _state = BgWorkerState.Running;
                     break;
                 case BgWorkerState.Running:
@@ -253,8 +254,6 @@ namespace AvaloniaGif
 
             _currentIndex = (_currentIndex + 1) % _gifDecoder.Frames.Count;
 
-            CurrentFrameChanged?.Invoke();
-
             var targetDelay = _gifDecoder.Frames[_currentIndex].FrameDelay;
 
             var t1 = _timer.Elapsed;
@@ -264,6 +263,7 @@ namespace AvaloniaGif
             var t2 = _timer.Elapsed;
             var delta = t2 - t1;
 
+            CurrentFrameChanged?.Invoke();
             if (delta > targetDelay) return;
             Thread.Sleep(targetDelay - delta);
 
